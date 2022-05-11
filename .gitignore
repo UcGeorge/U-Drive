@@ -30,7 +30,6 @@
 .pub-cache/
 .pub/
 /windows/
-/android/
 /ios/
 /web/
 /build/
