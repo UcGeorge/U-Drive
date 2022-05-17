@@ -2,42 +2,34 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_fonts/google_fonts.dart';
 
-import 'data/models/api_server.dart';
-import 'logic/cubit/root_navigator_cubit.dart';
-import 'logic/cubit/server_cubit.dart';
-import 'logic/src/navigators/navigator_interface.dart';
-import 'logic/src/navigators/root_navigator.dart';
+import '../../logic/cubit/ma_navigator_cubit.dart';
+import '../../logic/src/navigators/navigator_interface.dart';
 
-void main() {
-  runApp(const MyApp());
-}
+class MiniAppRoot extends StatelessWidget {
+  final AppNavigator navigator;
+  final MiniAppNavCubit navigatorCubit;
+  final String initialRoute;
 
-class MyApp extends StatelessWidget {
-  const MyApp({Key? key}) : super(key: key);
+  const MiniAppRoot(
+    this.initialRoute, {
+    Key? key,
+    required this.navigator,
+    required this.navigatorCubit,
+  }) : super(key: key);
 
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    AppNavigator navigator = RootNavigator();
-    RootNavigatorCubit _rootNavigator = RootNavigatorCubit(navigator);
-
     return MultiBlocProvider(
       providers: [
         BlocProvider(
-          create: ((context) => _rootNavigator),
+          create: ((context) => navigatorCubit),
           lazy: false,
-        ),
-        BlocProvider(
-          create: ((context) => ServerCubit(KServer(
-                name: 'UcGeorge',
-                public: true,
-              ))),
-          lazy: true,
         ),
       ],
       child: MaterialApp(
         debugShowCheckedModeBanner: false,
-        title: 'U-Drive',
+        title: initialRoute,
         theme: ThemeData(
           scaffoldBackgroundColor: Colors.white,
           primarySwatch: Colors.indigo,
@@ -50,7 +42,7 @@ class MyApp extends StatelessWidget {
           ),
         ),
         onGenerateRoute: navigator.onGenerateRoute,
-        initialRoute: 'first',
+        initialRoute: initialRoute,
       ),
     );
   }
