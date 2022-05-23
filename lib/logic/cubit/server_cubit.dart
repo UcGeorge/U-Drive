@@ -5,9 +5,9 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../data/models/api_server.dart';
 import '../../data/models/server_log.dart';
-import '../src/classes/api_response.dart';
-import '../src/handlers/get.dart';
-import '../src/handlers/post.dart';
+import '../classes/api_response.dart';
+import '../handlers/get.dart';
+import '../handlers/post.dart';
 import 'authenticator_cubit.dart';
 
 part 'server_state.dart';

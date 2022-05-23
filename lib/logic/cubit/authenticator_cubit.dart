@@ -2,7 +2,7 @@ import 'dart:math';
 
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-import '../src/classes/client.dart';
+import '../classes/client.dart';
 
 part 'authenticator_state.dart';
 

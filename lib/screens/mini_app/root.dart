@@ -3,7 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 import '../../logic/cubit/ma_navigator_cubit.dart';
-import '../../logic/src/navigators/navigator_interface.dart';
+import '../../logic/cubit/navigator_cubit.dart';
 
 class MiniAppRoot extends StatelessWidget {
   final AppNavigator navigator;

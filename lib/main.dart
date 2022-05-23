@@ -3,10 +3,9 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 import 'data/models/api_server.dart';
+import 'logic/cubit/navigator_cubit.dart';
 import 'logic/cubit/root_navigator_cubit.dart';
 import 'logic/cubit/server_cubit.dart';
-import 'logic/src/navigators/navigator_interface.dart';
-import 'logic/src/navigators/root_navigator.dart';
 
 void main() {
   runApp(const MyApp());

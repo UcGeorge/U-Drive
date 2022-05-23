@@ -1,9 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:u_drive/screens/mini_app/root.dart';
 
 import '../logic/cubit/ma_navigator_cubit.dart';
-import '../logic/src/navigators/mini_app_navigator.dart';
-import '../logic/src/navigators/navigator_interface.dart';
+import '../logic/cubit/navigator_cubit.dart';
+import 'mini_app/root.dart';
 import 'widgets/menu_bar.dart';
 
 class HomeScreen extends StatelessWidget {

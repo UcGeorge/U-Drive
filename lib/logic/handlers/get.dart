@@ -1,15 +1,16 @@
 import 'dart:io';
 
-import '../../cubit/server_cubit.dart';
-import '../classes/api_response.dart';
-import '../../cubit/authenticator_cubit.dart';
-import '../errors/exception.dart';
-import '../classes/request_handler.dart';
-import 'post/post_request_access.dart';
+import 'package:u_drive/logic/cubit/server_cubit.dart';
 
-/// [RequestHandler] for handling requests on the `POST /...` route
-class PostHandler extends RequestHandler {
-  PostHandler(HttpRequest request, AuthenticatorCubit authenticator,
+import '../classes/api_response.dart';
+import '../classes/request_handler.dart';
+import '../cubit/authenticator_cubit.dart';
+import '../errors/exception.dart';
+import 'get/get_probe.dart';
+
+/// [RequestHandler] for handling requests on the `GET /...` route
+class GetHandler extends RequestHandler {
+  GetHandler(HttpRequest request, AuthenticatorCubit authenticator,
       ServerCubit serverCubit)
       : super(request, authenticator, serverCubit);
 
@@ -20,6 +21,7 @@ class PostHandler extends RequestHandler {
         ..statusCode = e is InvalidRouteException
             ? HttpStatus.notFound
             : HttpStatus.badRequest
+        // ..reasonPhrase = e.message
         ..write(ApiResponse.bad(e.message))
         ..close();
     });
@@ -32,8 +34,8 @@ class PostHandler extends RequestHandler {
 
     String rootPath = pathSegments.first;
     switch (rootPath) {
-      case 'request-access':
-        PostRequestAccessHandler(request, authenticator, serverCubit, this);
+      case 'probe':
+        GetProbeHandler(request, authenticator, serverCubit, this);
         break;
       default:
         request.response
