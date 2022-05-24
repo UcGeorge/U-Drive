@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:u_drive/logic/cubit/server_cubit.dart';
+import '../logic/cubit/server_cubit.dart';
 
 import '../logic/cubit/root_navigator_cubit.dart';
 

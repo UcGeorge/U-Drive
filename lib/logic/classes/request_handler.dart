@@ -1,9 +1,7 @@
 import 'dart:io';
 
-import 'package:u_drive/logic/cubit/authenticator_cubit.dart';
-import 'package:u_drive/logic/cubit/server_cubit.dart';
-
-import 'authenticator.dart';
+import '../cubit/authenticator_cubit.dart';
+import '../cubit/server_cubit.dart';
 import '../errors/exception.dart';
 
 typedef ErrorCallback = void Function(ApiException e);
@@ -43,7 +41,9 @@ abstract class RequestHandler {
   /// - Call `super.handle(request)` to get the request body fron the [HttpRequest].
   /// This action is usually performed at the end of the route.
   Future<void> handle(HttpRequest request) async {
-    _requestBody = String.fromCharCodes(await request.first);
+    try {
+      _requestBody = String.fromCharCodes(await request.first);
+    } catch (_) {}
   }
 
   /// Generally a series of check functions within a try-catch block used to confirm

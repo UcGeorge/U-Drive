@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../logic/cubit/ma_navigator_cubit.dart';
 import '../logic/cubit/navigator_cubit.dart';
@@ -10,8 +11,9 @@ class HomeScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    String initialRoute = 'server-clients';
     AppNavigator minAppNav = MiniAppNavigator();
-    MiniAppNavCubit minAppNavCubit = MiniAppNavCubit(minAppNav);
+    MiniAppNavCubit minAppNavCubit = MiniAppNavCubit(minAppNav, initialRoute);
 
     return Scaffold(
       body: Column(
@@ -24,16 +26,19 @@ class HomeScreen extends StatelessWidget {
                     const SizedBox(width: 200),
                     Expanded(
                       child: MiniAppRoot(
-                        'server',
+                        initialRoute,
                         navigator: minAppNav,
                         navigatorCubit: minAppNavCubit,
                       ),
-                    )
+                    ),
                   ],
                 ),
-                MenuBar(
-                  navigator: minAppNav,
-                  navigatorCubit: minAppNavCubit,
+                BlocProvider.value(
+                  value: minAppNavCubit,
+                  child: MenuBar(
+                    navigator: minAppNav,
+                    navigatorCubit: minAppNavCubit,
+                  ),
                 ),
               ],
             ),

@@ -1,10 +1,12 @@
 import 'dart:io';
 
-import 'package:u_drive/logic/cubit/server_cubit.dart';
+import 'package:u_drive/logic/handlers/get/get_test_access.dart';
 
 import '../classes/api_response.dart';
 import '../classes/request_handler.dart';
 import '../cubit/authenticator_cubit.dart';
+import '../cubit/server_cubit.dart';
+import '../errors/check.dart';
 import '../errors/exception.dart';
 import 'get/get_probe.dart';
 
@@ -37,6 +39,9 @@ class GetHandler extends RequestHandler {
       case 'probe':
         GetProbeHandler(request, authenticator, serverCubit, this);
         break;
+      case 'test-access':
+        GetTestAccess(request, authenticator, serverCubit, this);
+        break;
       default:
         request.response
           ..statusCode = HttpStatus.notFound
@@ -48,6 +53,18 @@ class GetHandler extends RequestHandler {
 
   @override
   Future<bool> validateRequest(HttpRequest request,
-          {required ErrorCallback onError}) async =>
-      true;
+      {required ErrorCallback onError}) async {
+    List<String> pathSegments = request.uri.pathSegments;
+    try {
+      check(
+        pathSegments.isNotEmpty,
+        "Invalid route information",
+        exceptionType: ApiExceptionType.invalidRouteException,
+      );
+      return true;
+    } on ApiException catch (e) {
+      onError(e);
+      return false;
+    }
+  }
 }

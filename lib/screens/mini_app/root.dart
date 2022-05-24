@@ -3,10 +3,11 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 import '../../logic/cubit/ma_navigator_cubit.dart';
-import '../../logic/cubit/navigator_cubit.dart';
+import '../../logic/cubit/navigator_cubit.dart' as na;
+import '../../logic/cubit/server_cubit.dart';
 
 class MiniAppRoot extends StatelessWidget {
-  final AppNavigator navigator;
+  final na.AppNavigator navigator;
   final MiniAppNavCubit navigatorCubit;
   final String initialRoute;
 
@@ -25,6 +26,15 @@ class MiniAppRoot extends StatelessWidget {
         BlocProvider(
           create: ((context) => navigatorCubit),
           lazy: false,
+        ),
+        BlocProvider.value(
+          value: context.read<ServerCubit>(),
+        ),
+        BlocProvider.value(
+          value: context.read<ServerCubit>().authenticator,
+        ),
+        BlocProvider.value(
+          value: context.read<ServerCubit>().authenticator.requestAccessCubit,
         ),
       ],
       child: MaterialApp(

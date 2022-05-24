@@ -9,6 +9,6 @@ class KServer {
   KServer({
     required this.name,
     required this.public,
-  })  : address = InternetAddress.loopbackIPv4,
+  })  : address = InternetAddress('127.0.0.1'),
         port = 4040;
 }

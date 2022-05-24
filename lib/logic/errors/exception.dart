@@ -1,7 +1,8 @@
 enum ApiExceptionType {
   defaultException,
   invalidRouteException,
-  badRequestException
+  badRequestException,
+  unauthorizedException
 }
 
 class ApiException implements Exception {
@@ -16,4 +17,8 @@ class InvalidRouteException extends ApiException {
 
 class BadRequestException extends ApiException {
   BadRequestException(String message) : super(message);
+}
+
+class UnauthorizedException extends ApiException {
+  UnauthorizedException(String message) : super(message);
 }

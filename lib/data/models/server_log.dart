@@ -1,8 +1,12 @@
 abstract class ServerLog {
+  final DateTime _timeStamp;
+
+  ServerLog() : _timeStamp = DateTime.now();
+
   LogType get type;
   String get message;
   String? get body;
-  DateTime get timeStamp;
+  DateTime get timeStamp => _timeStamp;
 }
 
 enum LogType {
@@ -12,7 +16,7 @@ enum LogType {
   warning,
 }
 
-class ServerMessageLog implements ServerLog {
+class ServerMessageLog extends ServerLog {
   final String _message;
   final String? _body;
 
@@ -25,13 +29,10 @@ class ServerMessageLog implements ServerLog {
   String get message => _message;
 
   @override
-  DateTime get timeStamp => DateTime.now();
-
-  @override
   LogType get type => LogType.serverMessage;
 }
 
-class NetworkRequestLog implements ServerLog {
+class NetworkRequestLog extends ServerLog {
   final String _message;
   final String? _body;
 
@@ -44,13 +45,10 @@ class NetworkRequestLog implements ServerLog {
   String get message => _message;
 
   @override
-  DateTime get timeStamp => DateTime.now();
-
-  @override
   LogType get type => LogType.networkRequest;
 }
 
-class CloseServerLog implements ServerLog {
+class CloseServerLog extends ServerLog {
   @override
   String? get body => null;
 
@@ -58,7 +56,17 @@ class CloseServerLog implements ServerLog {
   String get message => 'Server is closing';
 
   @override
-  DateTime get timeStamp => DateTime.now();
+  LogType get type => LogType.warning;
+}
+
+class WarningServerLog extends ServerLog {
+  final String _message;
+  WarningServerLog(this._message);
+  @override
+  String? get body => null;
+
+  @override
+  String get message => _message;
 
   @override
   LogType get type => LogType.warning;

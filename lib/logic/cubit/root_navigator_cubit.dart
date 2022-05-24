@@ -5,7 +5,8 @@ import '../../screens/home.dart';
 import 'navigator_cubit.dart';
 
 class RootNavigatorCubit extends NavigatorCubit {
-  RootNavigatorCubit(AppNavigator navigator) : super(navigator);
+  RootNavigatorCubit(AppNavigator navigator, String initialRoute)
+      : super(navigator, initialRoute);
 
   void goHome(BuildContext context) => navigateTo(context, 'home');
   void gotoFirstPage(BuildContext context) => navigateTo(context, 'first');

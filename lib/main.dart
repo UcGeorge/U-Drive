@@ -17,8 +17,10 @@ class MyApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
+    String initialRoute = 'first';
     AppNavigator navigator = RootNavigator();
-    RootNavigatorCubit _rootNavigator = RootNavigatorCubit(navigator);
+    RootNavigatorCubit _rootNavigator =
+        RootNavigatorCubit(navigator, initialRoute);
 
     return MultiBlocProvider(
       providers: [
@@ -29,7 +31,7 @@ class MyApp extends StatelessWidget {
         BlocProvider(
           create: ((context) => ServerCubit(KServer(
                 name: 'UcGeorge',
-                public: true,
+                public: false,
               ))),
           lazy: true,
         ),
@@ -49,7 +51,7 @@ class MyApp extends StatelessWidget {
           ),
         ),
         onGenerateRoute: navigator.onGenerateRoute,
-        initialRoute: 'first',
+        initialRoute: initialRoute,
       ),
     );
   }

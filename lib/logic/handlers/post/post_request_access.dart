@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'dart:io';
 
+import '../../../data/models/server_log.dart';
 import '../../classes/api_response.dart';
 import '../../classes/client.dart';
 import '../../classes/request_handler.dart';
@@ -42,14 +43,28 @@ class PostRequestAccessHandler extends RequestHandler {
         ..reasonPhrase = "Access Granted"
         ..write(ApiResponse.good(data: client.toMap()))
         ..close();
+      serverCubit.log(NetworkRequestLog("${client.name} granted access."));
     } else {
-      await Future.delayed(const Duration(seconds: 5));
-      Client client = authenticator.addClient(jsonType['name']);
-      request.response
-        ..statusCode = HttpStatus.created
-        ..reasonPhrase = "Access Granted"
-        ..write(ApiResponse.good(data: client.toMap()))
-        ..close();
+      String clientName = jsonType['name'];
+      serverCubit.log(NetworkRequestLog("$clientName requested access."));
+      await authenticator.requestAccess(clientName, ((client) {
+        if (client != null) {
+          serverCubit
+              .log(NetworkRequestLog("${client.name} was granted access."));
+          request.response
+            ..statusCode = HttpStatus.created
+            ..reasonPhrase = "Access Granted"
+            ..write(ApiResponse.good(data: client.toMap()))
+            ..close();
+        } else {
+          serverCubit.log(NetworkRequestLog("$clientName was denied access."));
+          request.response
+            ..statusCode = HttpStatus.unauthorized
+            ..reasonPhrase = "Access Denied"
+            ..write(ApiResponse.bad('The server admin denied your request.'))
+            ..close();
+        }
+      }));
     }
   }
 

@@ -21,31 +21,21 @@ class LogTile extends StatelessWidget {
       decoration: BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.circular(8),
-        boxShadow: [
-          BoxShadow(
-            color: const Color(0xff0D1724).withOpacity(0.2),
-            blurRadius: 10,
-            offset: const Offset(5, 5),
-          ),
-        ],
       ),
       child: Row(
         children: [
           Container(
-            height: 40,
-            padding: const EdgeInsets.all(8),
+            height: 25,
+            width: 130,
             decoration: BoxDecoration(
               color: log.type == LogType.serverMessage
-                  ? Colors.orange
+                  ? Colors.orange.withOpacity(.2)
                   : log.type == LogType.probe
-                      ? Colors.blue
+                      ? Colors.blue.withOpacity(.2)
                       : log.type == LogType.warning
-                          ? Colors.red
-                          : Colors.green,
-              borderRadius: const BorderRadius.only(
-                topLeft: Radius.circular(8),
-                bottomLeft: Radius.circular(8),
-              ),
+                          ? Colors.red.withOpacity(.2)
+                          : Colors.green.withOpacity(.2),
+              borderRadius: BorderRadius.circular(200),
             ),
             child: Center(
               child: Text(
@@ -57,10 +47,16 @@ class LogTile extends StatelessWidget {
                             ? 'WARNING'
                             : 'NETWORK REQUEST',
                 style: GoogleFonts.poppins(
-                  fontSize: 13,
+                  fontSize: 10,
                   fontWeight: FontWeight.w600,
                   letterSpacing: 1,
-                  color: Colors.white,
+                  color: log.type == LogType.serverMessage
+                      ? Colors.orange
+                      : log.type == LogType.probe
+                          ? Colors.blue
+                          : log.type == LogType.warning
+                              ? Colors.red
+                              : Colors.green,
                 ),
               ),
             ),
@@ -69,7 +65,7 @@ class LogTile extends StatelessWidget {
           Text(
             log.message,
             style: GoogleFonts.poppins(
-              fontSize: 16,
+              fontSize: 14,
               // fontWeight: FontWeight.w600,
               // letterSpacing: 1,
               color: Colors.black,
@@ -79,29 +75,13 @@ class LogTile extends StatelessWidget {
           Text(
             '${log.timeStamp.hour}:${log.timeStamp.minute}:${log.timeStamp.second} - ${log.timeStamp.day} ${months[log.timeStamp.month]}, ${log.timeStamp.year}',
             style: GoogleFonts.poppins(
-              fontSize: 16,
+              fontSize: 11,
               letterSpacing: 1,
-              color: Colors.black.withOpacity(.5),
+              color: Colors.black.withOpacity(.7),
+              fontWeight: FontWeight.w600,
             ),
           ),
           const SizedBox(width: 20),
-          Container(
-            height: 40,
-            width: 5,
-            decoration: BoxDecoration(
-              color: log.type == LogType.serverMessage
-                  ? Colors.orange
-                  : log.type == LogType.probe
-                      ? Colors.blue
-                      : log.type == LogType.warning
-                          ? Colors.red
-                          : Colors.green,
-              borderRadius: const BorderRadius.only(
-                topRight: Radius.circular(8),
-                bottomRight: Radius.circular(8),
-              ),
-            ),
-          ),
         ],
       ),
     );

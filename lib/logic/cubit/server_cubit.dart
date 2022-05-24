@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'request_access_cubit.dart';
 
 import '../../data/models/api_server.dart';
 import '../../data/models/server_log.dart';
@@ -13,15 +14,20 @@ import 'authenticator_cubit.dart';
 part 'server_state.dart';
 
 class ServerCubit extends Cubit<ServerState> {
-  final AuthenticatorCubit _authenticator;
+  final AuthenticatorCubit authenticator;
   final KServer _server;
   final ScrollController logsScrollController;
   late HttpServer _httpServer;
 
   ServerCubit(this._server)
-      : _authenticator = AuthenticatorCubit(_server.public),
+      : authenticator = AuthenticatorCubit(
+          _server.public,
+          RequestAccessCubit(),
+        ),
         logsScrollController = ScrollController(),
-        super(ServerState.init());
+        super(ServerState.init()) {
+    authenticator.serverCubit = this;
+  }
 
   void log(ServerLog log) {
     emit(state.log(log));
@@ -47,9 +53,13 @@ class ServerCubit extends Cubit<ServerState> {
 
   void end() {
     _httpServer.close();
+    authenticator.clear();
+    authenticator.requestAccessCubit.clear();
     log(CloseServerLog());
     emit(state.copyWith(running: false, logs: List.empty(growable: true)));
   }
+
+  void clearLogs() => emit(state.copyWith(logs: List.empty(growable: true)));
 
   Future<void> _createServer() async {
     _httpServer = await HttpServer.bind(_server.address, _server.port);
@@ -57,15 +67,15 @@ class ServerCubit extends Cubit<ServerState> {
 
   Future<void> _handleRequests() async {
     await for (HttpRequest request in _httpServer) {
-      log(NetworkRequestLog("${request.method}: ${request.uri.path}"));
+      // log(NetworkRequestLog("${request.method}: ${request.uri.path}"));
       print(
           "${request.method}: ${request.uri.path} ${request.uri.hasQuery ? request.uri.queryParameters : ""}");
       switch (request.method) {
         case 'GET':
-          GetHandler(request, _authenticator, this);
+          GetHandler(request, authenticator, this);
           break;
         case 'POST':
-          PostHandler(request, _authenticator, this);
+          PostHandler(request, authenticator, this);
           break;
         default:
           _handleDefault(request);
