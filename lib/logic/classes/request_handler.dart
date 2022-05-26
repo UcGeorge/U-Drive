@@ -71,12 +71,12 @@ abstract class RequestHandler {
   /// bool validateRequest(HttpRequest request, {required ErrorCallback onError}) {
   /// List<String> pathSegments = request.uri.pathSegments;
   ///   try {
-  ///     test(
+  ///     check(
   ///       pathSegments.length == 1,
   ///       "Invalid route information",
   ///       exceptionType: ApiExceptionType.invalidRouteException,
   ///     );
-  ///     test(
+  ///     check(
   ///       request.headers.contentType?.value.contains('application/json') ??
   ///           false,
   ///       "Please set content-type header to application/json",

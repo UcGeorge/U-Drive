@@ -58,7 +58,7 @@ class GetHandler extends RequestHandler {
     try {
       check(
         pathSegments.isNotEmpty,
-        "Invalid route information",
+        "Path segments must not be empty",
         exceptionType: ApiExceptionType.invalidRouteException,
       );
       return true;
