@@ -5,7 +5,8 @@ class AuthenticatorState {
   final bool accessRequested;
   final Map<String, Client> _authorizedClients;
 
-  bool isAuthenticated(String token) => _authorizedClients.containsKey(token);
+  bool isAuthenticated(String token) =>
+      _authorizedClients.containsKey(token) || isPublic;
 
   Map<String, Client> get authorizedClients => _authorizedClients;
 

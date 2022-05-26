@@ -2,6 +2,7 @@ import 'dart:io';
 
 import '../cubit/authenticator_cubit.dart';
 import '../cubit/server_cubit.dart';
+import '../errors/check.dart';
 import '../errors/exception.dart';
 
 typedef ErrorCallback = void Function(ApiException e);
@@ -35,6 +36,21 @@ abstract class RequestHandler {
   RequestHandler(HttpRequest request, this.authenticator, this.serverCubit,
       [this.parent]) {
     handle(request);
+  }
+
+  /// Predefined test for checking authentication of request
+  void authenticate(HttpRequest request) {
+    String? token = request.headers.value('authorization');
+    check(
+      authenticator.state.isPublic || token != null,
+      'Missing authorization token',
+      exceptionType: ApiExceptionType.unauthorizedException,
+    );
+    check(
+      authenticator.isAuthenticated(token!),
+      'Unauthorized token',
+      exceptionType: ApiExceptionType.unauthorizedException,
+    );
   }
 
   /// Handle all [HttpRequest] within the context,

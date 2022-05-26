@@ -11,17 +11,29 @@ void main() {
   runApp(const MyApp());
 }
 
-class MyApp extends StatelessWidget {
+class MyApp extends StatefulWidget {
   const MyApp({Key? key}) : super(key: key);
+
+  @override
+  State<MyApp> createState() => _MyAppState();
+}
+
+class _MyAppState extends State<MyApp> {
+  late String initialRoute;
+  late AppNavigator navigator;
+  late RootNavigatorCubit _rootNavigator;
+
+  @override
+  void initState() {
+    super.initState();
+    initialRoute = 'first';
+    navigator = RootNavigator();
+    _rootNavigator = RootNavigatorCubit(navigator, initialRoute);
+  }
 
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    String initialRoute = 'first';
-    AppNavigator navigator = RootNavigator();
-    RootNavigatorCubit _rootNavigator =
-        RootNavigatorCubit(navigator, initialRoute);
-
     return MultiBlocProvider(
       providers: [
         BlocProvider(
@@ -40,7 +52,7 @@ class MyApp extends StatelessWidget {
         debugShowCheckedModeBanner: false,
         title: 'U-Drive',
         theme: ThemeData(
-          scaffoldBackgroundColor: Colors.white,
+          scaffoldBackgroundColor: const Color(0xffFBFCFE),
           primarySwatch: Colors.indigo,
           textTheme: TextTheme(
             button: GoogleFonts.poppins(

@@ -6,15 +6,28 @@ import '../logic/cubit/navigator_cubit.dart';
 import 'mini_app/root.dart';
 import 'widgets/menu_bar.dart';
 
-class HomeScreen extends StatelessWidget {
+class HomeScreen extends StatefulWidget {
   const HomeScreen({Key? key}) : super(key: key);
 
   @override
-  Widget build(BuildContext context) {
-    String initialRoute = 'server-clients';
-    AppNavigator minAppNav = MiniAppNavigator();
-    MiniAppNavCubit minAppNavCubit = MiniAppNavCubit(minAppNav, initialRoute);
+  State<HomeScreen> createState() => _HomeScreenState();
+}
 
+class _HomeScreenState extends State<HomeScreen> {
+  late String initialRoute;
+  late AppNavigator minAppNav;
+  late MiniAppNavCubit minAppNavCubit;
+
+  @override
+  void initState() {
+    super.initState();
+    initialRoute = 'server-clients';
+    minAppNav = MiniAppNavigator();
+    minAppNavCubit = MiniAppNavCubit(minAppNav, initialRoute);
+  }
+
+  @override
+  Widget build(BuildContext context) {
     return Scaffold(
       body: Column(
         children: [
@@ -35,10 +48,7 @@ class HomeScreen extends StatelessWidget {
                 ),
                 BlocProvider.value(
                   value: minAppNavCubit,
-                  child: MenuBar(
-                    navigator: minAppNav,
-                    navigatorCubit: minAppNavCubit,
-                  ),
+                  child: const MenuBar(),
                 ),
               ],
             ),

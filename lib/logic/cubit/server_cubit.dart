@@ -45,7 +45,7 @@ class ServerCubit extends Cubit<ServerState> {
     //     '${_server.public ? 'Public' : 'Private'} HTTP Server started: $_server.address port $_server.port');
     await _createServer();
     log(ServerMessageLog('Started Server'));
-    log(ServerMessageLog('Created requests handler'));
+    // log(ServerMessageLog('Created requests handler'));
     await _handleRequests();
     // emit(state.log(CloseServerLog()));
     print('${_server.public ? 'Public' : 'Private'} HTTP Server stopped');

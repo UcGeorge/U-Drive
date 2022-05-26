@@ -49,7 +49,10 @@ class AuthenticatorCubit extends Cubit<AuthenticatorState> {
     return client;
   }
 
-  void clear() => emit(AuthenticatorState.init(state.isPublic));
+  void clear() {
+    _serverCubit.log(WarningServerLog('Revoked access for all users.'));
+    emit(AuthenticatorState.init(state.isPublic));
+  }
 
   void removeClient(String token) {
     _serverCubit.log(WarningServerLog(
@@ -68,7 +71,7 @@ class AuthenticatorCubit extends Cubit<AuthenticatorState> {
     }
 
     Future.delayed(
-      const Duration(seconds: 1),
+      const Duration(milliseconds: 100),
       () => requestAccessCubit.requestAccess(clientName),
     );
 

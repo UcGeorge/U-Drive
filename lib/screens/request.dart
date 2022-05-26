@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_fonts/google_fonts.dart';
 
-import '../constants/colors.dart';
 import '../logic/cubit/authenticator_cubit.dart';
+import '../logic/cubit/ma_navigator_cubit.dart';
 import '../logic/cubit/request_access_cubit.dart';
 
 class RequestPopup extends StatelessWidget {
@@ -17,10 +17,11 @@ class RequestPopup extends StatelessWidget {
           listener: (_, state) {
             var unattended =
                 state.requests.values.where((element) => element == null);
-            print(unattended.length);
+            // print(unattended.length);
             if (unattended.isEmpty) {
               context.read<AuthenticatorCubit>().clearRequests();
               Navigator.pop(context);
+              context.read<MiniAppNavCubit>().showServerClients(context, false);
             }
           },
           child: Card(
@@ -31,11 +32,11 @@ class RequestPopup extends StatelessWidget {
                 height: 600,
                 width: 500,
                 decoration: BoxDecoration(
-                  color: Colors.white,
+                  color: const Color(0xffFBFCFE),
                   borderRadius: BorderRadius.circular(6),
                   border: Border.all(
-                    color: primaryColor,
-                    width: 2,
+                    color: const Color(0xffFBFCFE),
+                    width: 1,
                   ),
                   boxShadow: [
                     BoxShadow(
@@ -84,8 +85,9 @@ class RequestPopup extends StatelessWidget {
                       child:
                           BlocBuilder<RequestAccessCubit, RequestAccessState>(
                         builder: (_, state) {
-                          print('Building request list');
+                          // print('Building request list');
                           return ListView.builder(
+                            controller: ScrollController(),
                             shrinkWrap: true,
                             itemCount: state.requests.keys
                                 .where((element) =>
@@ -103,42 +105,103 @@ class RequestPopup extends StatelessWidget {
                                 padding:
                                     const EdgeInsets.symmetric(horizontal: 20),
                                 decoration: BoxDecoration(
-                                  color: primaryColor,
-                                  borderRadius: BorderRadius.circular(6),
-                                  boxShadow: [
-                                    BoxShadow(
-                                      color: Colors.black.withOpacity(0.34),
-                                      blurRadius: 4,
-                                      offset: const Offset(2, 2),
-                                    ),
-                                  ],
+                                  color: Colors.white,
+                                  border: Border.all(
+                                    color: const Color(0xffF5F6FA),
+                                    width: 2,
+                                  ),
+                                  borderRadius: BorderRadius.circular(12),
                                 ),
                                 child: Row(
                                   children: [
                                     Text(
                                       key,
                                       style: GoogleFonts.poppins(
-                                        color: Colors.white,
+                                        color: Colors.black,
                                         fontSize: 16,
                                         fontWeight: FontWeight.normal,
                                         letterSpacing: .5,
                                       ),
                                     ),
                                     const Spacer(),
-                                    IconButton(
-                                      color: Colors.white,
+                                    TextButton(
                                       onPressed: () => context
                                           .read<RequestAccessCubit>()
                                           .denyAccess(key),
-                                      icon: const Icon(Icons.close),
+                                      child: const Text('deny'),
+                                      style: ButtonStyle(
+                                        overlayColor:
+                                            MaterialStateProperty.all<Color?>(
+                                          Colors.red.withOpacity(.1),
+                                        ),
+                                        backgroundColor:
+                                            MaterialStateProperty.all<Color?>(
+                                          Colors.white,
+                                        ),
+                                        shape: MaterialStateProperty.all<
+                                            RoundedRectangleBorder>(
+                                          RoundedRectangleBorder(
+                                            borderRadius:
+                                                BorderRadius.circular(100),
+                                            side: const BorderSide(
+                                              color: Colors.red,
+                                              width: 1,
+                                            ),
+                                          ),
+                                        ),
+                                        foregroundColor:
+                                            MaterialStateProperty.all<Color?>(
+                                          Colors.red,
+                                        ),
+                                        textStyle: MaterialStateProperty.all<
+                                            TextStyle>(
+                                          GoogleFonts.poppins(
+                                            fontSize: 12,
+                                            fontWeight: FontWeight.normal,
+                                            letterSpacing: .5,
+                                          ),
+                                        ),
+                                      ),
                                     ),
-                                    const SizedBox(width: 5),
-                                    IconButton(
-                                      color: Colors.white,
+                                    const SizedBox(width: 10),
+                                    TextButton(
                                       onPressed: () => context
                                           .read<RequestAccessCubit>()
                                           .grantAccess(key),
-                                      icon: const Icon(Icons.check),
+                                      child: const Text('accept'),
+                                      style: ButtonStyle(
+                                        overlayColor:
+                                            MaterialStateProperty.all<Color?>(
+                                          Colors.green.withOpacity(.1),
+                                        ),
+                                        backgroundColor:
+                                            MaterialStateProperty.all<Color?>(
+                                          Colors.white,
+                                        ),
+                                        shape: MaterialStateProperty.all<
+                                            RoundedRectangleBorder>(
+                                          RoundedRectangleBorder(
+                                            borderRadius:
+                                                BorderRadius.circular(100),
+                                            side: const BorderSide(
+                                              color: Colors.green,
+                                              width: 1,
+                                            ),
+                                          ),
+                                        ),
+                                        foregroundColor:
+                                            MaterialStateProperty.all<Color?>(
+                                          Colors.green,
+                                        ),
+                                        textStyle: MaterialStateProperty.all<
+                                            TextStyle>(
+                                          GoogleFonts.poppins(
+                                            fontSize: 12,
+                                            fontWeight: FontWeight.normal,
+                                            letterSpacing: .5,
+                                          ),
+                                        ),
+                                      ),
                                     ),
                                   ],
                                 ),

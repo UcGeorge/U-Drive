@@ -42,18 +42,8 @@ class GetTestAccess extends RequestHandler {
   @override
   Future<bool> validateRequest(HttpRequest request,
       {required ErrorCallback onError}) async {
-    String? token = request.headers.value('authorization');
     try {
-      check(
-        token != null,
-        'Missing authorization token',
-        exceptionType: ApiExceptionType.unauthorizedException,
-      );
-      check(
-        authenticator.isAuthenticated(token!),
-        'Unauthorized token',
-        exceptionType: ApiExceptionType.unauthorizedException,
-      );
+      authenticate(request);
       return true;
     } on ApiException catch (e) {
       onError(e);

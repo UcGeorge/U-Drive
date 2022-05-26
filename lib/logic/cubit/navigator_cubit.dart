@@ -12,17 +12,20 @@ class NavigatorCubit extends Cubit<NavigatorState> {
       : super(NavigatorState(currentRoute: initialRoute));
 
   void navigateTo(BuildContext context, String path, [bool? push, bool? pop]) {
+    var prevState = state;
     emit(state.copyWith(currentRoute: path));
-    print(state);
     if (push ?? true) {
-      print('pushing...');
       if (pop ?? false) {
-        print('popping...');
+        print('popping "${prevState.currentRoute}"...');
         Navigator.of(context).popAndPushNamed(path);
       } else {
         Navigator.of(context).pushNamed(path);
       }
+      print('pushing "${state.currentRoute}"...');
+    } else {
+      print('intermediary state: "${state.currentRoute}"...');
     }
+    print(state);
   }
 }
 

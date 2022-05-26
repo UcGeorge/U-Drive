@@ -1,3 +1,4 @@
+import 'package:clipboard/clipboard.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_neumorphic/flutter_neumorphic.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -38,6 +39,10 @@ class ServerClientsScreen extends ServerScreenTemplate {
                   ),
                 ),
                 const Spacer(),
+                TextButton(
+                  onPressed: context.read<AuthenticatorCubit>().clear,
+                  child: const Text('Revoke all'),
+                ),
               ],
             ),
             const SizedBox(height: 20),
@@ -45,8 +50,6 @@ class ServerClientsScreen extends ServerScreenTemplate {
               child: BlocBuilder<AuthenticatorCubit, AuthenticatorState>(
                 builder: (context, state) {
                   return ListView.builder(
-                    controller:
-                        context.read<ServerCubit>().logsScrollController,
                     itemCount: state.authorizedClients.length,
                     itemBuilder: (context, index) {
                       String token =
@@ -79,17 +82,34 @@ class ServerClientsScreen extends ServerScreenTemplate {
                               text: 'Access Token: ',
                               style: GoogleFonts.poppins(
                                 color: primaryColor,
-                                fontSize: 11,
+                                fontSize: 12,
                                 fontWeight: FontWeight.normal,
                                 letterSpacing: .5,
                               ),
                               children: <InlineSpan>[
                                 TextSpan(
                                   text: client.token,
-                                  style: TextStyle(
+                                  style: GoogleFonts.spaceMono(
                                     color: Colors.black.withOpacity(.5),
                                   ),
                                 ),
+                                WidgetSpan(
+                                  baseline: TextBaseline.alphabetic,
+                                  alignment: PlaceholderAlignment.middle,
+                                  child: InkWell(
+                                    onTap: () =>
+                                        FlutterClipboard.copy(client.token),
+                                    child: const Padding(
+                                      padding:
+                                          EdgeInsets.symmetric(horizontal: 4.0),
+                                      child: Icon(
+                                        Icons.copy,
+                                        color: primaryColor,
+                                        size: 14,
+                                      ),
+                                    ),
+                                  ),
+                                )
                               ],
                             ),
                           ),
@@ -98,6 +118,39 @@ class ServerClientsScreen extends ServerScreenTemplate {
                                 .read<AuthenticatorCubit>()
                                 .removeClient(token),
                             child: const Text('Revoke Access'),
+                            style: ButtonStyle(
+                              overlayColor: MaterialStateProperty.all<Color?>(
+                                Colors.red.withOpacity(.1),
+                              ),
+                              backgroundColor:
+                                  MaterialStateProperty.all<Color?>(
+                                Colors.white,
+                              ),
+                              shape: MaterialStateProperty.all<
+                                  RoundedRectangleBorder>(
+                                RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(100),
+                                  side: const BorderSide(
+                                    color: Colors.red,
+                                    width: 1,
+                                  ),
+                                ),
+                              ),
+                              foregroundColor:
+                                  MaterialStateProperty.all<Color?>(
+                                Colors.red,
+                              ),
+                              padding: MaterialStateProperty.all<EdgeInsets>(
+                                const EdgeInsets.all(10),
+                              ),
+                              textStyle: MaterialStateProperty.all<TextStyle>(
+                                GoogleFonts.poppins(
+                                  fontSize: 15,
+                                  fontWeight: FontWeight.normal,
+                                  letterSpacing: .5,
+                                ),
+                              ),
+                            ),
                           ),
                         ),
                       );

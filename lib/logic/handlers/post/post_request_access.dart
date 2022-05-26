@@ -43,21 +43,22 @@ class PostRequestAccessHandler extends RequestHandler {
         ..reasonPhrase = "Access Granted"
         ..write(ApiResponse.good(data: client.toMap()))
         ..close();
-      serverCubit.log(NetworkRequestLog("${client.name} granted access."));
+      serverCubit.log(NetworkRequestLog(
+          "${client.name} requested and was granted access."));
     } else {
       String clientName = jsonType['name'];
       serverCubit.log(NetworkRequestLog("$clientName requested access."));
       await authenticator.requestAccess(clientName, ((client) {
         if (client != null) {
           serverCubit
-              .log(NetworkRequestLog("${client.name} was granted access."));
+              .log(ServerMessageLog("${client.name} was granted access."));
           request.response
             ..statusCode = HttpStatus.created
             ..reasonPhrase = "Access Granted"
             ..write(ApiResponse.good(data: client.toMap()))
             ..close();
         } else {
-          serverCubit.log(NetworkRequestLog("$clientName was denied access."));
+          serverCubit.log(WarningServerLog("$clientName was denied access."));
           request.response
             ..statusCode = HttpStatus.unauthorized
             ..reasonPhrase = "Access Denied"
